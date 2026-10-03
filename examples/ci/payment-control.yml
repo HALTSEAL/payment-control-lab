@@ -1,0 +1,84 @@
+# CUSTOMER TEMPLATE: copy into your repository's .github/workflows/.
+# Requires an authorized private checkout or a licensed public distribution.
+# Replace the lab ref and bind payment_policy_adapter.py before adoption.
+name: Payment fallback checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out your application
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Check out the reviewed lab version
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          repository: HALTSEAL/payment-control-lab
+          ref: REPLACE_WITH_REVIEWED_40_CHARACTER_LAB_COMMIT
+          path: .payment-control-lab
+          persist-credentials: false
+          # A private cross-repository checkout needs separately authorized
+          # access. Do not add a broad token or expose it to untrusted PR code.
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      # Install your application's TEST dependencies here if required.
+      # Start advisory. Change report to gate after agreeing scope with owners.
+      - name: Start with a fresh report directory
+        run: python -c "import shutil; from pathlib import Path; p=Path('payment-control-results'); shutil.rmtree(p) if p.exists() else None"
+      - name: Check the actual local decision adapter
+        id: payment_check
+        run: python .payment-control-lab/lab.py check-policy payment_policy_adapter:decide --ci-mode report --out payment-control-results
+        # To compare explicit before/after wrappers, replace the command above:
+        # python .payment-control-lab/lab.py compare-policy payment_policy_before:decide payment_policy_after:decide --ci-mode report --out payment-control-results
+      - name: Show the diagnostic result in the job summary
+        if: always() && steps.payment_check.outcome != 'skipped'
+        shell: python
+        run: |
+          import json
+          import os
+          from pathlib import Path
+
+          report = Path("payment-control-results/report.json")
+          if report.is_file():
+              result = json.loads(report.read_text(encoding="utf-8"))
+              summary, ci = result["summary"], result["ci"]
+              lines = [
+                  "## Payment fallback diagnostics",
+                  "",
+                  f"**Diagnostic result: {summary['verdict']}**",
+                  f"Mode: {ci['mode']}. Diagnostic exit: {ci['diagnostic_exit_code']}; process exit: {ci['process_exit_code']}.",
+                  f"Findings or fixture mismatches: {summary['finding_count']}. Evidence gaps: {summary['evidence_gap_count']}.",
+                  "",
+                  "Advisory completion is not an approval. Synthetic matches do not establish production protection.",
+              ]
+              if "comparison" in result:
+                  change = result["comparison"]
+                  lines.append(f"Change: {change['improved_count']} improved; {change['regressed_count']} regressed; {change['uncertain_count']} uncertain; {change['after_mismatch_count']} candidate mismatches.")
+              lines += ["", "Download the report artifact for owner-summary.html, report.html, and report.json. Review the free follow-up actions and actual-workflow questions with the workflow owner."]
+          else:
+              lines = ["## Payment fallback diagnostics", "", "**No current diagnostic report.** The run did not complete; inspect the failed step. Do not use an older report as this run's result."]
+          with Path(os.environ["GITHUB_STEP_SUMMARY"]).open("a", encoding="utf-8") as stream:
+              stream.write("\n".join(lines) + "\n")
+      - name: Keep the result for the developer and workflow owner
+        if: always() && steps.payment_check.outcome != 'skipped'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: payment-control-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            payment-control-results/report.html
+            payment-control-results/report.json
+            payment-control-results/owner-summary.html
+          if-no-files-found: error
+          retention-days: 7

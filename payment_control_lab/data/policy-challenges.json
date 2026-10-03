@@ -1,0 +1,537 @@
+[
+  {
+    "case_id": "first-payment",
+    "title": "Initial exact payment",
+    "allowed_decisions": [
+      "ACCEPT"
+    ],
+    "context": {
+      "proposal": {
+        "obligation_id": "invoice-001",
+        "attempt_id": "attempt-b",
+        "route_id": "processor-b",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "payee_ref": "payee-001"
+      },
+      "obligation": {
+        "obligation_id": "invoice-001",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "minor_unit_exponent": 2,
+        "payee_ref": "payee-001"
+      },
+      "prior_attempts": [],
+      "declared_coverage_complete": true,
+      "approval_matches_proposal": true,
+      "fresh_decision": true
+    }
+  },
+  {
+    "case_id": "unknown-cross-route",
+    "title": "Unresolved original, different route",
+    "allowed_decisions": [
+      "HOLD",
+      "REFUSE"
+    ],
+    "context": {
+      "proposal": {
+        "obligation_id": "invoice-001",
+        "attempt_id": "attempt-b",
+        "route_id": "processor-b",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "payee_ref": "payee-001"
+      },
+      "obligation": {
+        "obligation_id": "invoice-001",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "minor_unit_exponent": 2,
+        "payee_ref": "payee-001"
+      },
+      "prior_attempts": [
+        {
+          "obligation_id": "invoice-001",
+          "attempt_id": "attempt-a",
+          "route_id": "processor-a",
+          "outcome": "unknown",
+          "evidence_final": false,
+          "evidence_origin": "provider"
+        }
+      ],
+      "declared_coverage_complete": true,
+      "approval_matches_proposal": true,
+      "fresh_decision": true
+    }
+  },
+  {
+    "case_id": "unknown-same-route",
+    "title": "Unresolved original, same route new attempt",
+    "allowed_decisions": [
+      "HOLD",
+      "REFUSE"
+    ],
+    "context": {
+      "proposal": {
+        "obligation_id": "invoice-001",
+        "attempt_id": "attempt-b",
+        "route_id": "processor-a",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "payee_ref": "payee-001"
+      },
+      "obligation": {
+        "obligation_id": "invoice-001",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "minor_unit_exponent": 2,
+        "payee_ref": "payee-001"
+      },
+      "prior_attempts": [
+        {
+          "obligation_id": "invoice-001",
+          "attempt_id": "attempt-a",
+          "route_id": "processor-a",
+          "outcome": "unknown",
+          "evidence_final": false,
+          "evidence_origin": "provider"
+        }
+      ],
+      "declared_coverage_complete": true,
+      "approval_matches_proposal": true,
+      "fresh_decision": true
+    }
+  },
+  {
+    "case_id": "nonfinal-failure",
+    "title": "Provisional failure",
+    "allowed_decisions": [
+      "HOLD",
+      "REFUSE"
+    ],
+    "context": {
+      "proposal": {
+        "obligation_id": "invoice-001",
+        "attempt_id": "attempt-b",
+        "route_id": "processor-b",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "payee_ref": "payee-001"
+      },
+      "obligation": {
+        "obligation_id": "invoice-001",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "minor_unit_exponent": 2,
+        "payee_ref": "payee-001"
+      },
+      "prior_attempts": [
+        {
+          "obligation_id": "invoice-001",
+          "attempt_id": "attempt-a",
+          "route_id": "processor-a",
+          "outcome": "failed_nonfinal",
+          "evidence_final": false,
+          "evidence_origin": "provider"
+        }
+      ],
+      "declared_coverage_complete": true,
+      "approval_matches_proposal": true,
+      "fresh_decision": true
+    }
+  },
+  {
+    "case_id": "nonfinal-closure",
+    "title": "Closure without final evidence",
+    "allowed_decisions": [
+      "HOLD",
+      "REFUSE"
+    ],
+    "context": {
+      "proposal": {
+        "obligation_id": "invoice-001",
+        "attempt_id": "attempt-b",
+        "route_id": "processor-b",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "payee_ref": "payee-001"
+      },
+      "obligation": {
+        "obligation_id": "invoice-001",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "minor_unit_exponent": 2,
+        "payee_ref": "payee-001"
+      },
+      "prior_attempts": [
+        {
+          "obligation_id": "invoice-001",
+          "attempt_id": "attempt-a",
+          "route_id": "processor-a",
+          "outcome": "closed_no_effect",
+          "evidence_final": false,
+          "evidence_origin": "provider"
+        }
+      ],
+      "declared_coverage_complete": true,
+      "approval_matches_proposal": true,
+      "fresh_decision": true
+    }
+  },
+  {
+    "case_id": "operator-closure",
+    "title": "Operator note is not final provider evidence",
+    "allowed_decisions": [
+      "HOLD",
+      "REFUSE"
+    ],
+    "context": {
+      "proposal": {
+        "obligation_id": "invoice-001",
+        "attempt_id": "attempt-b",
+        "route_id": "processor-b",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "payee_ref": "payee-001"
+      },
+      "obligation": {
+        "obligation_id": "invoice-001",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "minor_unit_exponent": 2,
+        "payee_ref": "payee-001"
+      },
+      "prior_attempts": [
+        {
+          "obligation_id": "invoice-001",
+          "attempt_id": "attempt-a",
+          "route_id": "processor-a",
+          "outcome": "closed_no_effect",
+          "evidence_final": true,
+          "evidence_origin": "operator"
+        }
+      ],
+      "declared_coverage_complete": true,
+      "approval_matches_proposal": true,
+      "fresh_decision": true
+    }
+  },
+  {
+    "case_id": "provider-closure",
+    "title": "Provider final closure and fresh decision",
+    "allowed_decisions": [
+      "ACCEPT"
+    ],
+    "context": {
+      "proposal": {
+        "obligation_id": "invoice-001",
+        "attempt_id": "attempt-b",
+        "route_id": "processor-b",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "payee_ref": "payee-001"
+      },
+      "obligation": {
+        "obligation_id": "invoice-001",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "minor_unit_exponent": 2,
+        "payee_ref": "payee-001"
+      },
+      "prior_attempts": [
+        {
+          "obligation_id": "invoice-001",
+          "attempt_id": "attempt-a",
+          "route_id": "processor-a",
+          "outcome": "closed_no_effect",
+          "evidence_final": true,
+          "evidence_origin": "provider"
+        }
+      ],
+      "declared_coverage_complete": true,
+      "approval_matches_proposal": true,
+      "fresh_decision": true
+    }
+  },
+  {
+    "case_id": "completed",
+    "title": "Original payment completed",
+    "allowed_decisions": [
+      "REFUSE"
+    ],
+    "context": {
+      "proposal": {
+        "obligation_id": "invoice-001",
+        "attempt_id": "attempt-b",
+        "route_id": "processor-b",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "payee_ref": "payee-001"
+      },
+      "obligation": {
+        "obligation_id": "invoice-001",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "minor_unit_exponent": 2,
+        "payee_ref": "payee-001"
+      },
+      "prior_attempts": [
+        {
+          "obligation_id": "invoice-001",
+          "attempt_id": "attempt-a",
+          "route_id": "processor-a",
+          "outcome": "completed",
+          "evidence_final": true,
+          "evidence_origin": "provider"
+        }
+      ],
+      "declared_coverage_complete": true,
+      "approval_matches_proposal": true,
+      "fresh_decision": true
+    }
+  },
+  {
+    "case_id": "route-drift",
+    "title": "Approval bound to another route",
+    "allowed_decisions": [
+      "REFUSE"
+    ],
+    "context": {
+      "proposal": {
+        "obligation_id": "invoice-001",
+        "attempt_id": "attempt-b",
+        "route_id": "processor-b",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "payee_ref": "payee-001"
+      },
+      "obligation": {
+        "obligation_id": "invoice-001",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "minor_unit_exponent": 2,
+        "payee_ref": "payee-001"
+      },
+      "prior_attempts": [],
+      "declared_coverage_complete": true,
+      "approval_matches_proposal": false,
+      "fresh_decision": true
+    }
+  },
+  {
+    "case_id": "amount-drift",
+    "title": "Amount differs from obligation",
+    "allowed_decisions": [
+      "REFUSE"
+    ],
+    "context": {
+      "proposal": {
+        "obligation_id": "invoice-001",
+        "attempt_id": "attempt-b",
+        "route_id": "processor-b",
+        "amount_minor": 125001,
+        "currency": "USD",
+        "payee_ref": "payee-001"
+      },
+      "obligation": {
+        "obligation_id": "invoice-001",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "minor_unit_exponent": 2,
+        "payee_ref": "payee-001"
+      },
+      "prior_attempts": [],
+      "declared_coverage_complete": true,
+      "approval_matches_proposal": true,
+      "fresh_decision": true
+    }
+  },
+  {
+    "case_id": "currency-drift",
+    "title": "Currency differs from obligation",
+    "allowed_decisions": [
+      "REFUSE"
+    ],
+    "context": {
+      "proposal": {
+        "obligation_id": "invoice-001",
+        "attempt_id": "attempt-b",
+        "route_id": "processor-b",
+        "amount_minor": 125000,
+        "currency": "EUR",
+        "payee_ref": "payee-001"
+      },
+      "obligation": {
+        "obligation_id": "invoice-001",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "minor_unit_exponent": 2,
+        "payee_ref": "payee-001"
+      },
+      "prior_attempts": [],
+      "declared_coverage_complete": true,
+      "approval_matches_proposal": true,
+      "fresh_decision": true
+    }
+  },
+  {
+    "case_id": "payee-drift",
+    "title": "Payee differs from obligation",
+    "allowed_decisions": [
+      "REFUSE"
+    ],
+    "context": {
+      "proposal": {
+        "obligation_id": "invoice-001",
+        "attempt_id": "attempt-b",
+        "route_id": "processor-b",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "payee_ref": "payee-002"
+      },
+      "obligation": {
+        "obligation_id": "invoice-001",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "minor_unit_exponent": 2,
+        "payee_ref": "payee-001"
+      },
+      "prior_attempts": [],
+      "declared_coverage_complete": true,
+      "approval_matches_proposal": true,
+      "fresh_decision": true
+    }
+  },
+  {
+    "case_id": "stale-decision",
+    "title": "Fresh decision not established",
+    "allowed_decisions": [
+      "REFUSE"
+    ],
+    "context": {
+      "proposal": {
+        "obligation_id": "invoice-001",
+        "attempt_id": "attempt-b",
+        "route_id": "processor-b",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "payee_ref": "payee-001"
+      },
+      "obligation": {
+        "obligation_id": "invoice-001",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "minor_unit_exponent": 2,
+        "payee_ref": "payee-001"
+      },
+      "prior_attempts": [],
+      "declared_coverage_complete": true,
+      "approval_matches_proposal": true,
+      "fresh_decision": false
+    }
+  },
+  {
+    "case_id": "unobserved-route",
+    "title": "Declared route is not captured",
+    "allowed_decisions": [
+      "HOLD",
+      "REFUSE"
+    ],
+    "context": {
+      "proposal": {
+        "obligation_id": "invoice-001",
+        "attempt_id": "attempt-b",
+        "route_id": "processor-b",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "payee_ref": "payee-001"
+      },
+      "obligation": {
+        "obligation_id": "invoice-001",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "minor_unit_exponent": 2,
+        "payee_ref": "payee-001"
+      },
+      "prior_attempts": [],
+      "declared_coverage_complete": false,
+      "approval_matches_proposal": true,
+      "fresh_decision": true
+    }
+  },
+  {
+    "case_id": "different-obligation",
+    "title": "Prior attempt belongs to another obligation",
+    "allowed_decisions": [
+      "ACCEPT"
+    ],
+    "context": {
+      "proposal": {
+        "obligation_id": "invoice-001",
+        "attempt_id": "attempt-b",
+        "route_id": "processor-b",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "payee_ref": "payee-001"
+      },
+      "obligation": {
+        "obligation_id": "invoice-001",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "minor_unit_exponent": 2,
+        "payee_ref": "payee-001"
+      },
+      "prior_attempts": [
+        {
+          "obligation_id": "invoice-002",
+          "attempt_id": "attempt-a",
+          "route_id": "processor-a",
+          "outcome": "unknown",
+          "evidence_final": false,
+          "evidence_origin": "provider"
+        }
+      ],
+      "declared_coverage_complete": true,
+      "approval_matches_proposal": true,
+      "fresh_decision": true
+    }
+  },
+  {
+    "case_id": "bank-closure",
+    "title": "Bank final closure and fresh decision",
+    "allowed_decisions": [
+      "ACCEPT"
+    ],
+    "context": {
+      "proposal": {
+        "obligation_id": "invoice-001",
+        "attempt_id": "attempt-b",
+        "route_id": "processor-b",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "payee_ref": "payee-001"
+      },
+      "obligation": {
+        "obligation_id": "invoice-001",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "minor_unit_exponent": 2,
+        "payee_ref": "payee-001"
+      },
+      "prior_attempts": [
+        {
+          "obligation_id": "invoice-001",
+          "attempt_id": "attempt-a",
+          "route_id": "processor-a",
+          "outcome": "closed_no_effect",
+          "evidence_final": true,
+          "evidence_origin": "bank"
+        }
+      ],
+      "declared_coverage_complete": true,
+      "approval_matches_proposal": true,
+      "fresh_decision": true
+    }
+  }
+]

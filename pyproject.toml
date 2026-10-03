@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "haltseal-payment-control-lab"
+version = "0.2.0"
+description = "Offline, reproducible diagnostics for payment fallback and recovery"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{name = "Scott Lee"}]
+dependencies = []
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Software Development :: Testing",
+]
+
+[project.urls]
+Repository = "https://github.com/HALTSEAL/payment-control-lab"
+Website = "https://haltseal.com/"
+
+[project.scripts]
+payment-control-lab = "payment_control_lab.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["payment_control_lab*"]
+
+[tool.setuptools.package-data]
+payment_control_lab = ["data/*.json", "data/traces/*.json"]

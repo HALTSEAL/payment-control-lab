@@ -1,0 +1,103 @@
+{
+  "schema_version": "0.1",
+  "source_type": "synthetic",
+  "workflow_name": "Operator note treated as final closure",
+  "routes": [
+    {
+      "route_id": "processor-a",
+      "label": "Original processor",
+      "coverage": "captured"
+    },
+    {
+      "route_id": "processor-b",
+      "label": "Backup processor",
+      "coverage": "captured"
+    },
+    {
+      "route_id": "bank-portal",
+      "label": "Manual bank portal",
+      "coverage": "captured"
+    }
+  ],
+  "obligations": [
+    {
+      "obligation_id": "invoice-001",
+      "amount_minor": 125000,
+      "currency": "USD",
+      "minor_unit_exponent": 2,
+      "payee_ref": "payee-001"
+    }
+  ],
+  "events": [
+    {
+      "type": "decision",
+      "decision_id": "decision-attempt-a",
+      "decision": "ACCEPT",
+      "action": {
+        "obligation_id": "invoice-001",
+        "attempt_id": "attempt-a",
+        "route_id": "processor-a",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "payee_ref": "payee-001"
+      },
+      "event_id": "event-001",
+      "at": "2026-01-01T12:00:00Z"
+    },
+    {
+      "type": "release",
+      "action": {
+        "obligation_id": "invoice-001",
+        "attempt_id": "attempt-a",
+        "route_id": "processor-a",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "payee_ref": "payee-001"
+      },
+      "decision_id": "decision-attempt-a",
+      "event_id": "event-002",
+      "at": "2026-01-01T12:00:01Z"
+    },
+    {
+      "type": "outcome",
+      "attempt_id": "attempt-a",
+      "outcome": "closed_no_effect",
+      "evidence": {
+        "origin": "operator",
+        "reference": "evidence-attempt-a-closed_no_effect",
+        "final": true
+      },
+      "event_id": "event-003",
+      "at": "2026-01-01T12:00:02Z"
+    },
+    {
+      "type": "decision",
+      "decision_id": "decision-attempt-b",
+      "decision": "ACCEPT",
+      "action": {
+        "obligation_id": "invoice-001",
+        "attempt_id": "attempt-b",
+        "route_id": "processor-b",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "payee_ref": "payee-001"
+      },
+      "event_id": "event-004",
+      "at": "2026-01-01T12:00:03Z"
+    },
+    {
+      "type": "release",
+      "action": {
+        "obligation_id": "invoice-001",
+        "attempt_id": "attempt-b",
+        "route_id": "processor-b",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "payee_ref": "payee-001"
+      },
+      "decision_id": "decision-attempt-b",
+      "event_id": "event-005",
+      "at": "2026-01-01T12:00:04Z"
+    }
+  ]
+}

@@ -1,0 +1,114 @@
+[
+  {
+    "case_id": "lost-response",
+    "title": "Lost response, released backup",
+    "question": "Did a second route release while the first outcome remained unknown?",
+    "expected_verdict": "CONTROL_GAP_OBSERVED",
+    "resource": "traces/lost-response.json"
+  },
+  {
+    "case_id": "held-backup",
+    "title": "Lost response, held backup",
+    "question": "Was the replacement held while the original remained unresolved?",
+    "expected_verdict": "NO_FINDING_IN_TRACE",
+    "resource": "traces/held-backup.json"
+  },
+  {
+    "case_id": "nonfinal-failure",
+    "title": "Nonfinal failure, released backup",
+    "question": "Was a provisional failure mistaken for final closure?",
+    "expected_verdict": "CONTROL_GAP_OBSERVED",
+    "resource": "traces/nonfinal-failure.json"
+  },
+  {
+    "case_id": "final-closure",
+    "title": "Final closure, new exact decision",
+    "question": "Was reliable closure recorded before a fresh decision for the replacement?",
+    "expected_verdict": "NO_FINDING_IN_TRACE",
+    "resource": "traces/final-closure.json"
+  },
+  {
+    "case_id": "completed-refused",
+    "title": "Completed original, refused replacement",
+    "question": "Was replacement refused after the original completed?",
+    "expected_verdict": "NO_FINDING_IN_TRACE",
+    "resource": "traces/completed-refused.json"
+  },
+  {
+    "case_id": "completed-repaid",
+    "title": "Completed original, released replacement",
+    "question": "Was the same obligation released again after completion?",
+    "expected_verdict": "CONTROL_GAP_OBSERVED",
+    "resource": "traces/completed-repaid.json"
+  },
+  {
+    "case_id": "route-changed",
+    "title": "Route changed after approval",
+    "question": "Did the execution use a different route from its decision?",
+    "expected_verdict": "CONTROL_GAP_OBSERVED",
+    "resource": "traces/route-changed.json"
+  },
+  {
+    "case_id": "amount-changed",
+    "title": "Amount changed after approval",
+    "question": "Did the exact amount change between approval and execution?",
+    "expected_verdict": "CONTROL_GAP_OBSERVED",
+    "resource": "traces/amount-changed.json"
+  },
+  {
+    "case_id": "payee-changed",
+    "title": "Payee changed after approval",
+    "question": "Did the payee change between approval and execution?",
+    "expected_verdict": "CONTROL_GAP_OBSERVED",
+    "resource": "traces/payee-changed.json"
+  },
+  {
+    "case_id": "operator-closure",
+    "title": "Operator note treated as final closure",
+    "question": "Was an operator assertion used to close the original attempt?",
+    "expected_verdict": "CONTROL_GAP_OBSERVED",
+    "resource": "traces/operator-closure.json"
+  },
+  {
+    "case_id": "unobserved-portal",
+    "title": "Manual bank portal not observed",
+    "question": "Does the review include the manual execution path?",
+    "expected_verdict": "INCONCLUSIVE",
+    "resource": "traces/unobserved-portal.json"
+  },
+  {
+    "case_id": "missing-decision",
+    "title": "Release without captured decision",
+    "question": "Are the decision records sufficient to assess the release?",
+    "expected_verdict": "INCONCLUSIVE",
+    "resource": "traces/missing-decision.json"
+  },
+  {
+    "case_id": "conflicting-outcomes",
+    "title": "Conflicting terminal outcomes",
+    "question": "Do the outcome records contradict each other?",
+    "expected_verdict": "INCONCLUSIVE",
+    "resource": "traces/conflicting-outcomes.json"
+  },
+  {
+    "case_id": "independent-obligations",
+    "title": "Two independently mapped obligations",
+    "question": "Are separate obligations kept separate despite identical payee and amount?",
+    "expected_verdict": "NO_FINDING_IN_TRACE",
+    "resource": "traces/independent-obligations.json"
+  },
+  {
+    "case_id": "two-approvals",
+    "title": "Two approvals before the first release",
+    "question": "Did two earlier approvals lead to overlapping execution attempts?",
+    "expected_verdict": "CONTROL_GAP_OBSERVED",
+    "resource": "traces/two-approvals.json"
+  },
+  {
+    "case_id": "reused-decision",
+    "title": "Replacement reused the original decision",
+    "question": "Did the replacement receive its own exact decision?",
+    "expected_verdict": "CONTROL_GAP_OBSERVED",
+    "resource": "traces/reused-decision.json"
+  }
+]

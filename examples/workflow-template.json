@@ -1,0 +1,32 @@
+{
+  "schema_version": "0.1",
+  "source_type": "redacted_history",
+  "workflow_name": "Replace with your workflow name",
+  "routes": [
+    {
+      "route_id": "processor-a",
+      "label": "Original processor",
+      "coverage": "captured"
+    },
+    {
+      "route_id": "processor-b",
+      "label": "Backup processor",
+      "coverage": "captured"
+    },
+    {
+      "route_id": "bank-portal",
+      "label": "Manual bank portal",
+      "coverage": "unobserved"
+    }
+  ],
+  "obligations": [
+    {
+      "obligation_id": "invoice-001",
+      "amount_minor": 125000,
+      "currency": "USD",
+      "minor_unit_exponent": 2,
+      "payee_ref": "payee-001"
+    }
+  ],
+  "events": []
+}

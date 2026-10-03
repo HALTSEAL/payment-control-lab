@@ -1,0 +1,273 @@
+{
+  "report_schema_version": "0.2",
+  "tool_version": "0.2.0",
+  "kind": "trace_review",
+  "workflow_name": "Backup payout after a lost response",
+  "source_type": "synthetic",
+  "findings": [
+    {
+      "finding_id": "F001",
+      "code": "ACCEPT_WHILE_UNRESOLVED",
+      "category": "control_gap",
+      "summary": "A replacement is accepted while an earlier attempt for this obligation remains unresolved.",
+      "next_step": "Keep the replacement on hold until reliable closure evidence is obtained, then validate the exact replacement again.",
+      "event_id": "event-004",
+      "obligation_id": "invoice-001",
+      "attempt_id": "attempt-b",
+      "route_id": "processor-b",
+      "predecessor_attempts": [
+        "attempt-a"
+      ],
+      "predecessor_count": 1
+    },
+    {
+      "finding_id": "F002",
+      "code": "RELEASE_WHILE_UNRESOLVED",
+      "category": "control_gap",
+      "summary": "A replacement is released while an earlier attempt for this obligation remains unresolved.",
+      "next_step": "Keep the replacement on hold until reliable closure evidence is obtained, then validate the exact replacement again.",
+      "event_id": "event-005",
+      "obligation_id": "invoice-001",
+      "attempt_id": "attempt-b",
+      "route_id": "processor-b",
+      "predecessor_attempts": [
+        "attempt-a"
+      ],
+      "predecessor_count": 1
+    }
+  ],
+  "limitations": [
+    "This is a synthetic trace. A reproduced scenario is not evidence of a real customer incident or production protection.",
+    "Only supplied records and declared routes are reviewed. Omitted obligations or routes cannot be discovered automatically.",
+    "Evidence labels and obligation mapping are supplied by the operator. The lab does not authenticate provider or bank evidence.",
+    "No payment is executed, blocked, signed, or authorized by this tool. No production readiness or certification is implied."
+  ],
+  "input_digest": "9c1321bce9ca9cb5bc84ff5839bbd7bd0546c92f3fcfb0c86d773cdbb25e2935",
+  "scope": {
+    "routes": [
+      {
+        "route_id": "processor-a",
+        "label": "Original processor",
+        "coverage": "captured"
+      },
+      {
+        "route_id": "processor-b",
+        "label": "Backup processor",
+        "coverage": "captured"
+      },
+      {
+        "route_id": "bank-portal",
+        "label": "Manual bank portal",
+        "coverage": "captured"
+      }
+    ],
+    "obligations": [
+      {
+        "obligation_id": "invoice-001",
+        "amount_minor": 125000,
+        "currency": "USD",
+        "minor_unit_exponent": 2,
+        "payee_ref": "payee-001"
+      }
+    ],
+    "event_count": 5
+  },
+  "timeline": [
+    {
+      "event_id": "event-001",
+      "at": "2026-01-01T12:00:00Z",
+      "type": "decision",
+      "detail": "ACCEPT recorded for attempt-a via processor-a.",
+      "record": {
+        "type": "decision",
+        "decision_id": "decision-attempt-a",
+        "decision": "ACCEPT",
+        "action": {
+          "obligation_id": "invoice-001",
+          "attempt_id": "attempt-a",
+          "route_id": "processor-a",
+          "amount_minor": 125000,
+          "currency": "USD",
+          "payee_ref": "payee-001"
+        },
+        "event_id": "event-001",
+        "at": "2026-01-01T12:00:00Z"
+      }
+    },
+    {
+      "event_id": "event-002",
+      "at": "2026-01-01T12:00:01Z",
+      "type": "release",
+      "detail": "Release recorded for attempt-a via processor-a.",
+      "record": {
+        "type": "release",
+        "action": {
+          "obligation_id": "invoice-001",
+          "attempt_id": "attempt-a",
+          "route_id": "processor-a",
+          "amount_minor": 125000,
+          "currency": "USD",
+          "payee_ref": "payee-001"
+        },
+        "decision_id": "decision-attempt-a",
+        "event_id": "event-002",
+        "at": "2026-01-01T12:00:01Z"
+      }
+    },
+    {
+      "event_id": "event-003",
+      "at": "2026-01-01T12:00:02Z",
+      "type": "outcome",
+      "detail": "unknown recorded for attempt-a.",
+      "record": {
+        "type": "outcome",
+        "attempt_id": "attempt-a",
+        "outcome": "unknown",
+        "event_id": "event-003",
+        "at": "2026-01-01T12:00:02Z"
+      }
+    },
+    {
+      "event_id": "event-004",
+      "at": "2026-01-01T12:00:03Z",
+      "type": "decision",
+      "detail": "ACCEPT recorded for attempt-b via processor-b.",
+      "record": {
+        "type": "decision",
+        "decision_id": "decision-attempt-b",
+        "decision": "ACCEPT",
+        "action": {
+          "obligation_id": "invoice-001",
+          "attempt_id": "attempt-b",
+          "route_id": "processor-b",
+          "amount_minor": 125000,
+          "currency": "USD",
+          "payee_ref": "payee-001"
+        },
+        "event_id": "event-004",
+        "at": "2026-01-01T12:00:03Z"
+      }
+    },
+    {
+      "event_id": "event-005",
+      "at": "2026-01-01T12:00:04Z",
+      "type": "release",
+      "detail": "Release recorded for attempt-b via processor-b.",
+      "record": {
+        "type": "release",
+        "action": {
+          "obligation_id": "invoice-001",
+          "attempt_id": "attempt-b",
+          "route_id": "processor-b",
+          "amount_minor": 125000,
+          "currency": "USD",
+          "payee_ref": "payee-001"
+        },
+        "decision_id": "decision-attempt-b",
+        "event_id": "event-005",
+        "at": "2026-01-01T12:00:04Z"
+      }
+    }
+  ],
+  "attempt_summary": [
+    {
+      "attempt_id": "attempt-a",
+      "obligation_id": "invoice-001",
+      "route_id": "processor-a",
+      "replay_status": "unknown"
+    },
+    {
+      "attempt_id": "attempt-b",
+      "obligation_id": "invoice-001",
+      "route_id": "processor-b",
+      "replay_status": "unknown"
+    }
+  ],
+  "summary": {
+    "verdict": "CONTROL_GAP_OBSERVED",
+    "finding_count": 2,
+    "evidence_gap_count": 0
+  },
+  "ci": {
+    "mode": "gate",
+    "diagnostic_exit_code": 2,
+    "process_exit_code": 2
+  },
+  "owner_summary": {
+    "schema_version": "0.1",
+    "workflow_name": "Backup payout after a lost response",
+    "source_type": "synthetic",
+    "result_kind": "trace_review",
+    "verdict": "CONTROL_GAP_OBSERVED",
+    "finding_count": 2,
+    "finding_label": "Recorded findings",
+    "evidence_gap_count": 0,
+    "scope_statement": "1 mapped obligations, 3 declared paths, 5 supplied events.",
+    "declared_routes": [
+      {
+        "route_id": "processor-a",
+        "label": "Original processor",
+        "coverage": "captured"
+      },
+      {
+        "route_id": "processor-b",
+        "label": "Backup processor",
+        "coverage": "captured"
+      },
+      {
+        "route_id": "bank-portal",
+        "label": "Manual bank portal",
+        "coverage": "captured"
+      }
+    ],
+    "decision_requested": "Review the finding and agree the next change with the workflow owner.",
+    "next_step": "Keep the replacement on hold until reliable closure evidence is obtained, then validate the exact replacement again.",
+    "priority_finding": {
+      "code": "ACCEPT_WHILE_UNRESOLVED",
+      "summary": "A replacement is accepted while an earlier attempt for this obligation remains unresolved.",
+      "event_id": "event-004",
+      "obligation_id": "invoice-001",
+      "attempt_id": "attempt-b",
+      "route_id": "processor-b"
+    },
+    "questions_for_owner": [
+      "Which actual obligation, original path, and replacement paths are in scope?",
+      "Who decides whether to release again, and what evidence supports that decision?",
+      "Which paths or records are missing, and when must the next decision be made?"
+    ],
+    "local_follow_up": {
+      "actions": [
+        "Inspect the referenced events, correct code or record mapping where appropriate, and rerun the free record review."
+      ],
+      "purchase_required": false,
+      "scope": "Local code checks and supplied-record diagnostics remain useful independently of paid services."
+    },
+    "workflow_follow_up": {
+      "questions": [
+        "Do all actual paths, including manual bank portals, use the decision under review?",
+        "Who verifies final closure evidence and maps the same obligation across paths?",
+        "Who owns the next change, and when must a release decision be made?"
+      ],
+      "scope": "These questions require evidence from the actual workflow. A synthetic match or incomplete history cannot answer them.",
+      "assessment_optional": true
+    },
+    "limits": [
+      "Findings are bounded by the supplied records or synthetic contexts; counts are not monetary losses.",
+      "Obligation mapping and final-evidence labels are operator assertions, not authenticated facts.",
+      "No payment is executed, blocked, signed, or authorized. Production protection is not established."
+    ],
+    "assessment": {
+      "optional": true,
+      "requires": "One actual workflow, an owner, original/backup paths, an agreed evidence scope, and an agreed fee.",
+      "deliverables": "A workflow readout, one page of findings and next steps, and supporting records.",
+      "progression": "Paid assessment, then shadow evaluation with no payment authority; selective enforcement requires technical validation and customer approval.",
+      "url": "https://haltseal.com/evaluate/?source=payment-control-lab#contact"
+    },
+    "input_digest": "9c1321bce9ca9cb5bc84ff5839bbd7bd0546c92f3fcfb0c86d773cdbb25e2935",
+    "ci": {
+      "mode": "gate",
+      "diagnostic_exit_code": 2,
+      "process_exit_code": 2
+    }
+  }
+}

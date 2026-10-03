@@ -1,0 +1,96 @@
+name: Lab quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Python ${{ matrix.python }} on ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            python: '3.11'
+          - os: ubuntu-latest
+            python: '3.12'
+          - os: ubuntu-latest
+            python: '3.13'
+          - os: ubuntu-latest
+            python: '3.14'
+          - os: windows-latest
+            python: '3.12'
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: ${{ matrix.python }}
+      # Each native command has its own step so a later success cannot mask
+      # an earlier failure under the default Windows PowerShell runner.
+      - name: Regression tests
+        run: python -m unittest discover -v
+      - name: Offline quickstart
+        run: python lab.py demo --out out/demo
+      - name: Independent policy expectations
+        run: python lab.py check-policy examples.fixture_policy:decide --out out/policy
+      - name: Before and after comparison
+        run: python lab.py compare-policy examples.route_retry_policy:decide examples.fixture_policy:decide --out out/change
+      - name: Advisory mode preserves findings
+        run: python lab.py check-policy examples.route_retry_policy:decide --ci-mode report --out out/advisory
+      - name: Unbound customer adapter stays inconclusive
+        run: python lab.py check-policy examples.customer_adapter:decide --ci-mode report --out out/unbound
+      - name: Verify comparison and advisory artifacts
+        run: >-
+          python -c "import json,pathlib; change=json.loads(pathlib.Path('out/change/report.json').read_text(encoding='utf-8')); advisory=json.loads(pathlib.Path('out/advisory/report.json').read_text(encoding='utf-8')); unbound=json.loads(pathlib.Path('out/unbound/report.json').read_text(encoding='utf-8')); assert change['summary']['verdict']=='EXPECTATIONS_MET'; assert change['comparison']['improved_count']>0; assert advisory['summary']['verdict']=='EXPECTATIONS_NOT_MET'; assert advisory['ci']['diagnostic_exit_code']==2; assert advisory['ci']['process_exit_code']==0; assert unbound['summary']['verdict']=='INCONCLUSIVE'; assert unbound['ci']['diagnostic_exit_code']==3; assert unbound['ci']['process_exit_code']==0; assert all(pathlib.Path('out',folder,'owner-summary.html').is_file() for folder in ('demo','policy','change','advisory','unbound'))"
+      - name: Build wheel
+        run: python -m pip wheel . --no-deps --wheel-dir dist
+      - name: Install wheel
+        run: python -m pip install --no-index --find-links dist haltseal-payment-control-lab
+      - name: Verify installed entrypoint away from checkout
+        working-directory: ${{ runner.temp }}
+        run: payment-control-lab --version
+      - name: Verify packaged resources away from checkout
+        working-directory: ${{ runner.temp }}
+        run: payment-control-lab demo --out installed-lab-report
+      - name: Verify installed owner summary
+        working-directory: ${{ runner.temp }}
+        run: python -c "import json; from pathlib import Path; r=json.loads(Path('installed-lab-report/report.json').read_text(encoding='utf-8')); assert r['tool_version']=='0.2.0'; assert r['owner_summary']['local_follow_up']['purchase_required'] is False; assert Path('installed-lab-report/owner-summary.html').is_file()"
+
+  report-layout:
+    name: Report browser and print checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+      - name: Install pinned development browser tooling
+        run: npm install --prefix .browser-check --no-save --ignore-scripts playwright@1.62.1
+      - name: Install Chromium and system dependencies
+        run: node .browser-check/node_modules/playwright/cli.js install --with-deps chromium
+      - name: Check desktop, mobile, keyboard, privacy, and A4 print layouts
+        run: node tools/check_report_layout.cjs
+      - name: Keep synthetic screenshots, owner PDFs, and the verification record
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: synthetic-report-layouts
+          path: out/browser-quality/
+          if-no-files-found: error
+          retention-days: 7
