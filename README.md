@@ -12,6 +12,21 @@ The lab reviews supplied records and checks trusted local decision functions aga
 
 The intended public package contains the diagnostic runtime, synthetic examples, regression tests and usage guides. The public repository contains only the reviewed diagnostic Work, licensing and public development files. No production API or execution SDK is released by this repository.
 
+## Start with your question
+
+| Your next step | Start here | What you get |
+| --- | --- | --- |
+| Diagnose existing records or a decision function | [Payment Control Lab](https://github.com/HALTSEAL/payment-control-lab#five-minute-start) | Local diagnostic reports and an owner summary. No account needed. |
+| Run exact-original recovery with a client | [Payments SDK](https://github.com/HALTSEAL/payments-sdk#choose-your-language) | A pinned Python or JavaScript synthetic exercise. No account needed. |
+| Evaluate your actual application hooks | [Request the Workflow Evaluation Kit](https://haltseal.com/workspace/#kit) | Scoped private evaluator access after readiness review, then an integration map, execution record and owner decision. |
+
+The Lab diagnoses supplied evidence. The SDK exercises explicit recovery calls.
+The private kit observes connected local application hooks. A reference pass
+verifies the kit; it does not establish customer coverage or production readiness.
+Kit access does not require purchasing a pilot. Bring the resulting evidence to
+an owner review, then [review the standard pilot](https://haltseal.com/pilot/start/)
+or [ask about a different scope](https://haltseal.com/pricing/#request) if useful.
+
 ## Five-minute start
 
 From a checkout, run one command:
